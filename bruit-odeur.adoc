@@ -1,43 +1,92 @@
-= Le bruit et l’odeur du code
+:source-highlighter: highlightjs
+:icons: font
+:revealjs_theme: solarized
+
+
+= Quand le code nous hérisse, pas que, le poil
 
 Nolwenn Doucet — Développeur depuis 5 ans
 
-J’aime le vélo, l’apéro et le métal qui tache
+J’aime le vélo, le métal et je suis docteur en sciences des matériaux.
 
 Orga des crafters de Lyon
 
-== Le bruit du code…
+== Nos logiciels présentent bien
 
 [.stretch]
-image::images/wtf-per-minutes.png[Niveau d’excellence du code produit]
+image::images/cute-software.png[cute]
 
-== L’odeur du code, ça se sent
+=== Nos logiciels terrifient
 
-[.stretch]
-image::images/smells.png[C’est long comme un jour sans pain]
+image::images/god-class.png[god-class]
+
+=== Nos logiciels éclopés
+
+[%step]
+* Logique métier dispersée
+* Le couplage aux frameworks ou bibliothèques tierces
+* Les switch case au milieu de boucles imbriquées
+* Héritage sur 8 générations
+* monObjet.getMachin().getBidule().getChouette().getFoo()
+
+== Les cris d’épouvante
 
 [%notitle]
-=== L’odeur du code, ça se sent
+image::images/wtf-per-minutes.png[code-review]
 
-image::images/refactoring.png[refactoring]
+== L’odeur du code
 
-== L’odeur du code, ça se sent que c’est toi
+image::images/smells.png[code-smells]
 
-* Logique métier dispersée
-* Le couplage au framework
-* Les entités anémiques qui se promènent de partout
-* Héritage sur 8 générations
-* Les champs de la bdd exposés au public
-* `monObjet.getMachin().getBidule().getChouette().getFoo()…`
+=== Mutable data
 
-== Know your enemy
+[,java]
+----
+class Cart {
+ private Collection<Product> products = new ArrayList<>();
+ private float total = 0;
 
-image::images/ratm.jpg[RATM, 400, 400]
-11/03/1992 (et oui, 30 ans bordel)
+ public void add(Product product, int quantity){
+  products.push(product);
+  total += product.price * quantity;
+ }
+}
+----
 
-=== Avec son IDE ou la CI
+=== Long parameter list, primitive obsession
 
-* Sonar et compagnie
+[,php]
+----
+public function transfertMoney(
+    string $debtor, <.>
+    string $creditor, <.>
+    int $amount, <.>
+    int $timestamp, <.>
+    boolean $repeat = false,
+    int $times = 0,
+    int $delay = 0): void
+{
+    …
+}
+----
+
+=== Magic value
+
+[%linenums,javascript]
+----
+if(product.type === 'alcool' && user.age >= 18){
+  cart.add(product);
+}
+----
+
+== Sentir les mauvaises odeurs
+
+=== Avec des outils
+
+* SonarLint
+
+image::images/complexite-244.png[Burk]
+
 * Tout ce qui est linter (eslint, spotbugs, php-md, etc.)
 
 === Avec des katas
@@ -46,24 +95,43 @@ En solo, en duo ou plus si affinité
 
 * Gilded Rose
 * Tennis Kata
-* Theatrical Player
 * Movie Rental
 * MarsRoverKataRefactoring (<- il est top celui-ci)
 * etc.
 
-=== Avec des club de lecture de code
-
-* https://codereading.club/
-* https://www.felienne.com/archives/6472
-
-=== Avec des cartes mémoires
-
-Entrainer son cerveau à reconnaitre des formes ou des motifs
-
-https://www.youtube.com/watch?v=H3L0aN9KItA (Llewellyn Falco)
-
-== C’est la lutte
-
-Contre la complexité accidentelle
+== C’est la lutte aka le refactoring
 
 image::images/kent-beck.png[Notre maître à tous]
+
+=== On sort l’IDE 
+
+L’effet démo va-t-il arriver ?
+
+=== Utiliser les outils de son IDE 
+
+Extract variable:: Évite une répétition locale ou permet d’injecter une variable dans une fonction
+Inline:: Supprimer une variable ou une fonction en l’utilisant directement
+
+=== Et d’autres encore
+
+* Invert if
+* Change signature
+* …
+
+== À retenir
+
+* Pensez à la personne qui lira votre code
+* Apprenez à utiliser les outils de refactoring
+* Tester automatiquement pour refactorer sans crainte
+
+
+== Ressources
+
+https://martinfowler.com/books/refactoring.html
+
+https://github.com/nicoespeon/abracadabra/blob/main/REFACTORINGS.md
+
+https://github.com/emilybache
+
+https://www.meetup.com/fr-FR/Software-Craftsmanship-Lyon/
+
